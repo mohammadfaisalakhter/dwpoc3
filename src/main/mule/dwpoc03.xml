@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="abb3733a-8ecb-4548-a92f-cf423c13ce42" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="dwpoc3Flow" doc:id="0680fda9-20a4-4cc7-a28c-1de4c39b6a09" >
+		<http:listener doc:name="Listener" doc:id="9fde2088-4e16-4702-8102-ac101c339291" config-ref="HTTP_Listener_config" path="/dwpoc3"/>
+		<ee:transform doc:name="Transform Message" doc:id="7d4ecf9a-9704-4a96-bec0-55da7921d717" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+var dwpoc3_pl1 = [4,2,7,4,1,7,3,2,99,25]
+output application/json
+---
+//POC-3 DW Function
+{
+	"Filter Even with isEven" : dwpoc3_pl1 filter ((item, index) -> isEven(item)),
+	"Filter Even with mod" : dwpoc3_pl1 filter ((item, index) -> mod(item,2) == 0),
+	"Filter Odd with isOdd" : dwpoc3_pl1 filter ((item, index) -> isOdd(item)),
+	"Filter Odd with mod" : dwpoc3_pl1 filter ((item, index) -> mod(item,2) == 1),
+	"Filter 2nd highest" : (dwpoc3_pl1 orderBy ((item, index) -> item))[-2]
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
