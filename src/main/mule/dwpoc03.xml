@@ -10,6 +10,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	</http:listener-config>
 	<flow name="dwpoc3Flow" doc:id="0680fda9-20a4-4cc7-a28c-1de4c39b6a09" >
 		<http:listener doc:name="Listener" doc:id="9fde2088-4e16-4702-8102-ac101c339291" config-ref="HTTP_Listener_config" path="/dwpoc3"/>
+		<logger level="INFO" doc:name="Logger" doc:id="25cb02b3-35a9-4536-b0d7-fbc3c51ccdee" message="start flow"/>
 		<ee:transform doc:name="Transform Message" doc:id="7d4ecf9a-9704-4a96-bec0-55da7921d717" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -26,5 +27,6 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="Logger1" doc:id="764bf7c1-95c0-407a-844b-92aee88e9541" message="#[payload]" />
 	</flow>
 </mule>
